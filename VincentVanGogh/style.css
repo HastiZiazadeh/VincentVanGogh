@@ -1,0 +1,70 @@
+h2{
+    font-size: 48px;
+    color: #6494ee;
+    text-align: center;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    text-shadow: 2px 2px 4px #2f3363;
+}
+
+#tp{
+    border: 3px dashed #50066d;
+    color: #56439b;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-variant: small-caps;
+    background-color: #fff3e0;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+/* custom extra classes for analysis paragraphs */
+.analysis p {
+    direction: rtl ;
+    margin-bottom: 10px;
+}
+
+.analysis strong {
+    color: #711ab8;
+    font-weight: bold;
+}
+
+/* responsive images */
+@media (max-width: 700px) {
+    .art-img {
+        width: 90%;
+    }
+    .flex-gallery {
+        flex-direction: column;
+        align-items: center;
+    }
+    h1 {
+        font-size: 32px;
+    }
+}
+
+/* Custom list style */
+.list-section {
+    direction: rtl;
+    text-align: right;
+}
+
+.list-section ul, 
+.list-section ol {
+    padding-right: 30px;
+    padding-left: 0;
+}
+
+.list-section li {
+    margin-bottom: 8px;
+}
+
+/* برای اینکه اعداد و حروف لیست نیز در سمت راست نمایش داده شوند */
+.list-section ol {
+    list-style-position: inside;
+}
+
+/* pre style */
+pre {
+    font-size: 18px;
+    background: linear-gradient(500deg, #cf5186, #b815e0b7);
+    border-left: 10px solid #36083a;
+}
