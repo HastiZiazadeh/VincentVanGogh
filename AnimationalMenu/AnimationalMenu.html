@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رستوران خوشمزه | منوی آنلاین</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tahoma', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #e6bf6d 0%, #96a0fc 100%);
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        /* انیمیشن محو شدن صفحه */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* هدر با انیمیشن */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #c55b83, #e67e22);
+            border-radius: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: white;
+            font-size: 48px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+                text-shadow: 5px 5px 10px rgba(0,0,0,0.4);
+            }
+        }
+
+        .subtitle {
+            color: #fff2e6;
+            font-size: 18px;
+            margin-top: 10px;
+            animation: blinkText 2s ease-in-out infinite;
+        }
+
+        @keyframes blinkText {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; letter-spacing: 2px; }
+        }
+
+        /* بخش دسته‌بندی */
+        .category {
+            margin-bottom: 50px;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .category:nth-child(1) { animation-delay: 0.1s; }
+        .category:nth-child(2) { animation-delay: 0.2s; }
+        .category:nth-child(3) { animation-delay: 0.3s; }
+        .category:nth-child(4) { animation-delay: 0.4s; }
+        .category:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category-title {
+            font-size: 32px;
+            color: #c0392b;
+            border-right: 5px solid #e67e22;
+            padding-right: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .category-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 0;
+            height: 3px;
+            background: #e67e22;
+            transition: width 0.5s ease;
+        }
+
+        .category:hover .category-title::after {
+            width: 100%;
+        }
+
+        /* گرید منو */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        /* کارت غذا با انیمیشن hover پیشرفته */
+        .food-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .food-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(230,126,34,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .food-card:hover::before {
+            left: 100%;
+        }
+
+        .food-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+        }
+
+        /* تصویر غذا */
+        .food-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            transition: all 0.4s ease;
+        }
+
+        .food-card:hover .food-image {
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* کانتینر نام غذا با آیکون انیمیشن دار */
+        .food-name-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .food-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* آیکون انیمیشن دار کنار اسم */
+        .animated-icon {
+            display: inline-block;
+            font-size: 24px;
+            animation: iconBounce 0.6s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-5px) rotate(10deg);
+            }
+            75% {
+                transform: translateY(3px) rotate(-5deg);
+            }
+        }
+
+        /* آیکون‌های مختلف با انیمیشن متفاوت */
+        .icon-pizza {
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .icon-burger {
+            animation: shake 0.8s ease-in-out infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px) rotate(-5deg); }
+            75% { transform: translateX(3px) rotate(5deg); }
+        }
+
+        .-icon-potato {
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .icon-salad {
+            animation: pulse-icon 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .icon-drink {
+            animation: wobble 0.8s ease-in-out infinite;
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+        }
+
+        .food-desc {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .food-price {
+            font-size: 24px;
+            color: #e67e22;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* دکمه سفارش با انیمیشن */
+        .order-btn {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .order-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(230,126,34,0.4);
+            animation: btnShake 0.5s ease;
+        }
+
+        @keyframes btnShake {
+            0%, 100% { transform: scale(1.05) rotate(0deg); }
+            25% { transform: scale(1.05) rotate(5deg); }
+            75% { transform: scale(1.05) rotate(-5deg); }
+        }
+
+        /* نوشیدنی‌ها بخش ویژه */
+        .drinks-section {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border-radius: 30px;
+            padding: 30px;
+            margin-top: 30px;
+            animation: colorShift 4s infinite;
+        }
+
+        @keyframes colorShift {
+            0% { background: linear-gradient(135deg, #2c3e50, #34495e); }
+            50% { background: linear-gradient(135deg, #31553f, #1bc793); }
+            100% { background: linear-gradient(135deg, #2c3e50, #34495e); }
+        }
+
+        .drinks-section .category-title {
+            color: #f39c12;
+            border-right-color: #f39c12;
+        }
+
+        .drinks-section .food-card {
+            background: rgba(255,255,255,0.95);
+        }
+
+        /* پیام سفارش */
+        .order-message {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #27ae60;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .order-message.show {
+            opacity: 1;
+            visibility: visible;
+            animation: bounceIn 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: translateX(-50%) scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: translateX(-50%) scale(1.1);
+            }
+            100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* نشان پرفروش و جدید */
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #e74c3c;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            animation: badgeBounce 1s infinite;
+            z-index: 10;
+        }
+
+        @keyframes badgeBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* فوتر */
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            color: #000000;
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* ریسپانسیو */
+        @media (max-width: 768px) {
+            h1 { font-size: 32px; }
+            .category-title { font-size: 26px; }
+            .menu-grid { grid-template-columns: 1fr; }
+            .food-image { height: 150px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍽️<b> سایت رستوران </b>ضیازاده</h1>
+            <h2>تمرین 8 کارگاه کامپیوتر-کلاس سه شنبه 16</h2>
+            <br>
+            <p class="subtitle">✨ بهترین غذاها با بهترین کیفیت ✨</p>
+            <p style="color:#fff2e6; margin-top:15px;"> ارسال رایگان برای سفارش‌های بالای 2 میلیون تومان</p>
+        </header>
+
+        <!-- بخش پیتزاها -->
+        <div class="category">
+            <h2 class="category-title">🍕 پیتزاهای ویژه</h2>
+            <div class="menu-grid">
+                <div class="food-card">
+                    <div class="badge">پرفروش</div>
+                    <img class="food-image" src="https://www.90kala.ir/wp-content/uploads/2025/10/pitza-margarita.jpg" alt="پیتزا مارگاریتا">
+                    <div class="food-name-container">
+                        <span class="food-name">پیتزا مارگاریتا</span>
+                        <span class="animated-icon icon-pizza">🍕✨</span>
+                    </div>
+                    <div class="food-desc">سس گوجه‌فرنگی، موتزارلا، ریحان تازه</div>
+                    <div class="food-price">460,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('پیتزا مارگاریتا')">سفارش</button>
+                </div>
+                <div class="food-card">
+                    <img class="food-image" src="https://www.beytoote.com/images/stories/food/fo841.jpg" alt="پیتزا پپرونی">
+                    <div class="food-name-container">
+                        <span class="food-name">پیتزا پپرونی</span>
+                        <span class="animated-icon icon-pizza">🍕🔥</span>
+                    </div>
+                    <div class="food-desc">پپرونی تند، پنیر گودا، سس مخصوص</div>
+                    <div class="food-price">550,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('پیتزا پپرونی')">سفارش</button>
+                </div>
+                <div class="food-card">
+                    <div class="badge">جدید</div>
+                    <img class="food-image" src="https://laptez.com/Opitures/178866962361752.jpg" alt="پیتزا چهارفصل">
+                    <div class="food-name-container">
+                        <span class="food-name">پیتزا چهارفصل</span>
+                        <span class="animated-icon icon-pizza">🍕⭐</span>
+                    </div>
+                    <div class="food-desc">گوشت، قارچ، ذرت، ژامبون، زیتون</div>
+                    <div class="food-price">600,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('پیتزا چهارفصل')">سفارش</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش برگرها -->
+        <div class="category">
+            <h2 class="category-title">🍔 برگرهای خاص</h2>
+            <div class="menu-grid">
+                <div class="food-card">
+                    <img class="food-image" src="https://express.snapp.market/mag/wp-content/uploads/2021/10/cheeseburger-04.jpg" alt="برگر چیزبرگر">
+                    <div class="food-name-container">
+                        <span class="food-name"> چیزبرگر</span>
+                        <span class="animated-icon icon-burger">🍔🧀</span>
+                    </div>
+                    <div class="food-desc">گوشت گوساله، پنیر چدار، خیارشور</div>
+                    <div class="food-price">400,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('برگر چیزبرگر')">سفارش</button>
+                </div>
+                <div class="food-card">
+                    <div class="badge">پرفروش</div>
+                    <img class="food-image" src="https://takhfifan.com/blog/wp-content/uploads/2023/07/burger-01.jpg" alt="برگر مخصوص">
+                    <div class="food-name-container">
+                        <span class="food-name">برگر مخصوص</span>
+                        <span class="animated-icon icon-burger">🍔👑</span>
+                    </div>
+                    <div class="food-desc">دو لایه گوشت، بیکن، سس مخصوص</div>
+                    <div class="food-price">500,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('برگر مخصوص')">سفارش</button>
+                </div>
+                <div class="food-card">
+                    <img class="food-image" src="https://atawich.com/Content/images/765//232929/mceu_7533426551702984800917.jpg" alt="برگر ماشروم">
+                    <div class="food-name-container">
+                        <span class="food-name"> ماشروم برگر</span>
+                        <span class="animated-icon icon-burger">🍔🍄</span>
+                    </div>
+                    <div class="food-desc">قارچ تازه، سیر، سس مایونز مخصوص</div>
+                    <div class="food-price">450,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('برگر ماشروم')">سفارش</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش سیب زمینی -->
+        <div class="category">
+            <h2 class="category-title">🥔 سیب زمینی</h2>
+            <div class="menu-grid">
+                <div class="food-card">
+                    <img class="food-image" src="https://media.hamshahrionline.ir/d/2025/04/26/4/5172748.jpg?ts=1745656797000" alt="سیب زمینی سوخاری">
+                    <div class="food-name-container">
+                        <span class="food-name">ظرف سوخاری</span>
+                        <span class="animated-icon icon-potato">🍟✨</span>
+                    </div>
+                    <div class="food-desc">  سیب زمینی و قارچ سوخاری </div>
+                    <div class="food-price">300,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('سیب زمینی سوخاری')">سفارش</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش سالادها -->
+        <div class="category">
+            <h2 class="category-title">🥗 سالادهای تازه</h2>
+            <div class="menu-grid">
+                <div class="food-card">
+                    <img class="food-image" src="https://blog.snappfood.ir/wp-content/uploads/2025/02/casear-salad.jpg" alt="سالاد سزار">
+                    <div class="food-name-container">
+                        <span class="food-name">سالاد سزار</span>
+                        <span class="animated-icon icon-salad">🥗✨</span>
+                    </div>
+                    <div class="food-desc">کاهو، سس سزار، کروتون، پنیر پارمزان</div>
+                    <div class="food-price">250,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('سالاد سزار')">سفارش</button>
+                </div>
+                <div class="food-card">
+                    <img class="food-image" src="https://kalleh.com/book/wp-content/uploads/sites/2/2018/04/greek-salad.jpg.webp" alt="سالاد یونانی">
+                    <div class="food-name-container">
+                        <span class="food-name">سالاد یونانی</span>
+                        <span class="animated-icon icon-salad">🥗🇬🇷</span>
+                    </div>
+                    <div class="food-desc">خیار، گوجه، فتا، زیتون، پیاز قرمز</div>
+                    <div class="food-price">150,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('سالاد یونانی')">سفارش</button>
+                </div>
+                <div class="food-card">
+                    <div class="badge">جدید</div>
+                    <img class="food-image" src="https://seemorgh.com/images/content/other/1394/02/summer-salads-05.jpg" alt="سالاد فصل">
+                    <div class="food-name-container">
+                        <span class="food-name">سالاد فصل تابستانی</span>
+                        <span class="animated-icon icon-salad">🥗🌸</span>
+                    </div>
+                    <div class="food-desc">سبزیجات تازه فصل با سس بالزامیک</div>
+                    <div class="food-price">200,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('سالاد فصل')">سفارش</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش نوشیدنی‌ها -->
+        <div class="drinks-section">
+            <h2 class="category-title">🥤 نوشیدنی‌های خنک</h2>
+            <div class="menu-grid">
+                <div class="food-card">
+                    <img class="food-image" src="https://cdn.tarhpik.com/5_Preview/1403/3/26/193713/Remote-photo-of-Coca-Cola-Sprite-Fanta-cold-drink-1000.webp" alt="نوشابه ">
+                    <div class="food-name-container">
+                        <span class="food-name">نوشابه </span>
+                        <span class="animated-icon icon-drink">🥤🔴</span>
+                    </div>
+                    <div class="food-desc">نوشابه گازدار، سرد و خنک</div>
+                    <div class="food-price">50,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('نوشابه ')">سفارش</button>
+                </div>
+                <div class="food-card">
+                    <img class="food-image" src="https://hiikaa.com/wp-content/uploads/2024/11/delester.jpg" alt="دلستر ">
+                    <div class="food-name-container">
+                        <span class="food-name">دلستر </span>
+                        <span class="animated-icon icon-drink">🥤🔵</span>
+                    </div>
+                    <div class="food-desc">دلستر با طعم کلاسیک،استوایی،لیمویی،هلویی</div>
+                    <div class="food-price">50,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('دلستر ')">سفارش</button>
+                </div>
+                <div class="food-card">
+                    <img class="food-image" src="https://cdn.tarhpik.com/5_Preview/1404/6/28/001058/three-mineral-water-bottle-on-transparent-background-free-png-400.webp" alt="آب معدنی">
+                    <div class="food-name-container">
+                        <span class="food-name">آب معدنی</span>
+                        <span class="animated-icon icon-drink">💧💎</span>
+                    </div>
+                    <div class="food-desc">آب خالص و معدنی</div>
+                    <div class="food-price">20,000 تومان</div>
+                    <button class="order-btn" onclick="showOrderMessage('آب معدنی')">سفارش</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📍 آدرس: تهران، خیابان کوهستان،مجتمع تجاری اوپال،طبقه فوت کورت، پلاک 3</p>
+            <p>📞 تلفن سفارشات: 021-22334455</p>
+            <p>🕒 ساعات کاری: 10 صبح تا 12 شب</p>
+            <br>
+            <p style="margin-top:15px;">✨ با تشکر از انتخاب شما ✨</p>
+        </footer>
+    </div>
+
+    <div id="orderMessage" class="order-message">✅ سفارش شما ثبت شد!</div>
+
+    <script>
+        function showOrderMessage(itemName) {
+            const messageDiv = document.getElementById('orderMessage');
+            messageDiv.textContent = `✅ ${itemName} با موفقیت به سبد خرید اضافه شد!`;
+            messageDiv.classList.add('show');
+            
+            setTimeout(() => {
+                messageDiv.classList.remove('show');
+            }, 2500);
+        }
+
+        // انیمیشن اسکرول نرم برای ظاهر شدن کارت‌ها
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // تنظیم اولیه برای همه کارت‌ها
+        document.querySelectorAll('.food-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease-out';
+            observer.observe(card);
+        });
+
+        // انیمیشن کلیک روی دکمه‌ها
+        document.querySelectorAll('.order-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
